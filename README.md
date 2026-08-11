@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Aurevia — local dev setup
 
 Three independent apps, three fixed ports, one command:
@@ -464,3 +465,7 @@ before.
 
 **Files changed this round:** `ProjectModal.tsx`, `ScrollStoryText.tsx`,
 `lib/motion.ts`, `AlternateContact.tsx`, `Footer.tsx`.
+=======
+# aurevia_fin
+final aurevia 
+>>>>>>> 3c2e4e7338657a1769592223345566058b30a546
