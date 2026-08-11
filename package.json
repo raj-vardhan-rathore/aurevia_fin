@@ -1,0 +1,19 @@
+{
+  "name": "aurevia-monorepo-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Root dev orchestrator for three independent Aurevia apps: the landing page (Express, :3000), aurevia-white (:3001) and aurevia-black (:3002, Next.js).",
+  "scripts": {
+    "dev": "concurrently -k -n LANDING,WHITE,BLACK -c blue,yellow,magenta \"npm:dev:landing\" \"npm:dev:white\" \"npm:dev:black\"",
+    "dev:landing": "node server/server.js",
+    "dev:white": "node scripts/serve-static-app.js --dir aurevia_white/frontend/build --port 3001 --strip-prefix /aurevia-white --name WHITE",
+    "dev:black": "npm run dev --prefix aurevia_black",
+    "install:all": "npm install && npm install --prefix aurevia_black && npm install --prefix aurevia_white/frontend"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

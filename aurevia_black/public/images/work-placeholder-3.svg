@@ -1,0 +1,12 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg3" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#151210" />
+      <stop offset="100%" stop-color="#040403" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg3)" />
+  <polygon points="600,320 760,620 600,920 440,620" fill="none" stroke="#C9A961" stroke-width="1" opacity="0.5" />
+  <polygon points="600,420 700,620 600,820 500,620" fill="none" stroke="#EDEAE3" stroke-opacity="0.18" stroke-width="1" />
+  <text x="600" y="1260" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#EDEAE3" fill-opacity="0.7" letter-spacing="4">NOCTUELLE</text>
+</svg>

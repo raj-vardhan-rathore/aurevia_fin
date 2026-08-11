@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurevia — Choose Your Experience</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#b8975a;
+    --gold-bright:#e0be82;
+    --gold-soft:rgba(184,151,90,.55);
+    --cream-bg:#f7f4ee;
+    --cream-bg2:#efeae0;
+    --cream-text:#1c1a17;
+    --cream-sub:#8a8579;
+    --noir-bg:#0a0908;
+    --noir-bg2:#131110;
+    --noir-text:#eae5d9;
+    --noir-sub:#75705f;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;width:100%;overflow:hidden;font-family:'Cormorant Garamond',serif;background:#000;}
+
+  /* ---------- PRELOADER ---------- */
+  .preloader{
+    position:fixed;inset:0;z-index:100;
+    background:#0a0908;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:opacity .9s ease, visibility .9s ease;
+  }
+  .preloader.hide{opacity:0;visibility:hidden;pointer-events:none;}
+  .preloader-word{
+    font-family:'Cinzel',serif;font-weight:500;letter-spacing:.5em;
+    font-size:clamp(22px,4vw,34px);color:#eae5d9;
+    display:flex;overflow:hidden;
+  }
+  .preloader-word span{
+    display:inline-block;opacity:0;transform:translateY(100%);
+    animation:letterUp .7s cubic-bezier(.19,1,.22,1) forwards;
+  }
+  @keyframes letterUp{to{opacity:1;transform:translateY(0);}}
+  .preloader-line{
+    margin-top:22px;width:0;height:1px;background:var(--gold);
+    animation:lineGrow 1.1s cubic-bezier(.19,1,.22,1) .9s forwards;
+  }
+  @keyframes lineGrow{to{width:120px;}}
+  .preloader-sub{
+    margin-top:16px;font-size:10px;letter-spacing:.35em;color:var(--gold);
+    font-family:'Cinzel',serif;opacity:0;
+    animation:fadeIn .8s ease 1.6s forwards;
+  }
+  @keyframes fadeIn{to{opacity:.8;}}
+
+  /* ---------- GATE: "Choose Your Experience" ---------- */
+  .gate{
+    position:fixed;inset:0;z-index:90;background:#0a0908;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    opacity:0;pointer-events:none;
+    transition:opacity .9s ease;
+  }
+  .gate.show{opacity:1;pointer-events:auto;}
+  .gate-eyebrow{
+    font-family:'Cinzel',serif;font-size:11px;letter-spacing:.42em;font-weight:400;
+    color:var(--gold);opacity:.85;margin-bottom:20px;
+  }
+  .gate-title{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
+    font-size:clamp(26px,4.6vw,48px);color:#eae5d9;letter-spacing:.02em;
+    display:flex;overflow:hidden;text-align:center;
+  }
+  .gate-title span{
+    display:inline-block;opacity:0;transform:translateY(100%);
+    animation:letterUp .65s cubic-bezier(.19,1,.22,1) forwards;
+  }
+  .gate-line{
+    margin-top:26px;width:0;height:1px;background:var(--gold);
+    animation:lineGrow 1s cubic-bezier(.19,1,.22,1) .5s forwards;
+  }
+
+  /* ---------- STAGE ---------- */
+  .stage{
+    position:relative;height:100vh;width:100vw;display:flex;
+    opacity:0;
+    transition:opacity 1.1s ease;
+  }
+  .stage.ready{opacity:1;}
+
+  .panel{
+    position:relative;height:100%;width:50%;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:width 1.15s cubic-bezier(.19,1,.22,1), background-color 1.15s ease;
+    cursor:pointer;overflow:hidden;
+  }
+  .stage.hover-left .panel-left{width:64%;}
+  .stage.hover-left .panel-right{width:36%;}
+  .stage.hover-right .panel-right{width:64%;}
+  .stage.hover-right .panel-left{width:36%;}
+
+  .panel-left{background:var(--cream-bg);color:var(--cream-text);}
+  .panel-right{background:var(--noir-bg);color:var(--noir-text);}
+
+  /* cursor spotlight */
+  .glow{
+    position:absolute;inset:0;pointer-events:none;opacity:0;
+    transition:opacity .4s ease;
+    background:radial-gradient(360px circle at var(--x,50%) var(--y,50%), var(--glow-color), transparent 70%);
+  }
+  .panel:hover .glow{opacity:1;}
+  .panel-left .glow{--glow-color:rgba(184,151,90,.12);}
+  .panel-right .glow{--glow-color:rgba(184,151,90,.10);}
+
+  /* texture layers */
+  .grain{
+    position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  }
+  .stars{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+  .stars span{
+    position:absolute;width:2px;height:2px;border-radius:50%;
+    background:var(--gold-soft);opacity:0;
+    animation:twinkle 5s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:0;}50%{opacity:.9;}}
+  .drift span{
+    position:absolute;bottom:-10px;width:3px;height:3px;border-radius:50%;
+    background:var(--gold);opacity:0;
+    animation:drift linear infinite;
+  }
+  @keyframes drift{
+    0%{transform:translateY(0);opacity:0;}
+    10%{opacity:.7;}
+    90%{opacity:.4;}
+    100%{transform:translateY(-110vh);opacity:0;}
+  }
+
+  .panel-inner{
+    position:relative;z-index:2;text-align:center;padding:0 6vw;
+    transform:translateY(4px);opacity:.96;
+    transition:transform .95s cubic-bezier(.19,1,.22,1), opacity .6s ease;
+  }
+  .stage.hover-left .panel-left .panel-inner,
+  .stage.hover-right .panel-right .panel-inner{transform:translateY(-6px) scale(1.02);opacity:1;}
+
+  .eyebrow{
+    font-family:'Cinzel',serif;font-size:11px;letter-spacing:.38em;font-weight:400;
+    margin-bottom:22px;white-space:nowrap;overflow:hidden;
+  }
+  .eyebrow span{display:inline-block;opacity:0;transform:translateY(10px);animation:letterUp .6s ease forwards;}
+  .panel-left .eyebrow{color:var(--cream-sub);}
+  .panel-right .eyebrow{color:var(--noir-sub);}
+
+  .panel-word{
+    font-size:clamp(40px,6.4vw,82px);font-weight:400;letter-spacing:.02em;line-height:1;
+    display:flex;justify-content:center;overflow:hidden;
+  }
+  .panel-word span{
+    display:inline-block;opacity:0;transform:translateY(60%);
+    animation:letterUp .8s cubic-bezier(.19,1,.22,1) forwards;
+  }
+  .panel-left .panel-word{font-style:italic;font-weight:300;}
+  .panel-right .panel-word{font-family:'Cinzel',serif;letter-spacing:.12em;font-weight:600;font-size:clamp(30px,4.6vw,56px);}
+
+  .tagline{
+    margin-top:20px;font-size:15px;font-weight:400;letter-spacing:.06em;max-width:320px;
+    opacity:0;transform:translateY(8px);
+    transition:opacity .8s ease .5s, transform .8s ease .5s;
+  }
+  .stage.ready .tagline{opacity:1;transform:translateY(0);}
+  .panel-left .tagline{color:var(--cream-sub);}
+  .panel-right .tagline{color:var(--noir-sub);text-transform:uppercase;font-size:12px;letter-spacing:.2em;}
+
+  /* magnetic CTA button */
+  .cta-wrap{margin-top:38px;height:34px;}
+  .cta{
+    position:relative;display:inline-flex;align-items:center;gap:10px;
+    font-family:'Cinzel',serif;font-size:11px;letter-spacing:.28em;
+    padding:10px 26px;border:1px solid var(--gold-soft);border-radius:999px;
+    opacity:0;transform:translateY(10px);
+    transition:opacity .5s ease .1s, transform .5s ease .1s, border-color .4s ease, background .4s ease, letter-spacing .4s ease;
+  }
+  .stage.hover-left .panel-left .cta,
+  .stage.hover-right .panel-right .cta{opacity:1;transform:translateY(0);}
+  .cta:hover{letter-spacing:.34em;border-color:var(--gold);}
+  .panel-left .cta{color:var(--cream-text);}
+  .panel-left .cta:hover{background:rgba(184,151,90,.09);}
+  .panel-right .cta{color:var(--noir-text);}
+  .panel-right .cta:hover{background:rgba(184,151,90,.12);}
+  .cta .arrow{transition:transform .4s ease;}
+  .cta:hover .arrow{transform:translateX(4px);}
+
+  /* ---------- WATERY SEAM (replaces the hard-line slide) ---------- */
+  .seam{
+    position:absolute;top:0;left:50%;height:100%;width:26px;z-index:5;pointer-events:none;
+    transform:translateX(-13px);
+    transition:left 1.15s cubic-bezier(.19,1,.22,1);
+    filter:drop-shadow(0 0 6px rgba(184,151,90,.25));
+  }
+  .stage.hover-left .seam{left:64%;}
+  .stage.hover-right .seam{left:36%;}
+  .wave-svg{width:100%;height:100%;display:block;overflow:visible;}
+  .wave-back{opacity:.45;filter:blur(2.5px);}
+  .wave-front{opacity:.95;}
+
+  .mark{
+    position:absolute;top:34px;left:50%;transform:translateX(-50%);z-index:6;
+    display:flex;align-items:center;gap:8px;
+    pointer-events:none;transition:left 1.15s cubic-bezier(.19,1,.22,1);
+  }
+  .stage.hover-left .mark{left:64%;}
+  .stage.hover-right .mark{left:36%;}
+  .mark-a{
+    font-family:'Cinzel',serif;font-style:italic;font-weight:400;
+    font-size:19px;letter-spacing:.1em;color:var(--gold-bright);
+    text-shadow:0 1px 10px rgba(0,0,0,.28);
+  }
+  .mark-b{
+    font-family:'Cinzel',serif;font-weight:600;letter-spacing:.22em;
+    font-size:19px;color:var(--gold-bright);
+    text-shadow:0 1px 10px rgba(0,0,0,.28);
+  }
+  .mark-dot{
+    width:5px;height:5px;border-radius:50%;background:var(--gold);
+    box-shadow:0 0 0 0 rgba(184,151,90,.6);
+    animation:pulseDot 2.4s ease-in-out infinite;
+  }
+  @keyframes pulseDot{
+    0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(184,151,90,.5);}
+    50%{transform:scale(1.5);box-shadow:0 0 8px 3px rgba(184,151,90,.15);}
+  }
+
+  .hint{
+    position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:6;
+    font-family:'Cinzel',serif;font-size:10px;letter-spacing:.32em;color:var(--gold);
+    opacity:.85;pointer-events:none;text-align:center;
+    transition:left 1.15s cubic-bezier(.19,1,.22,1);
+    animation:hintPulse 2.6s ease-in-out infinite;
+  }
+  @keyframes hintPulse{0%,100%{opacity:.5;}50%{opacity:.95;}}
+  .stage.hover-left .hint{left:64%;}
+  .stage.hover-right .hint{left:36%;}
+
+  /* corner UI */
+  .corner{
+    position:absolute;z-index:6;font-family:'Cinzel',serif;font-size:10px;
+    letter-spacing:.25em;pointer-events:none;opacity:0;
+    transition:opacity .8s ease .5s;
+  }
+  .stage.ready .corner{opacity:1;}
+  .corner.tl{top:38px;left:38px;color:var(--cream-sub);}
+  .corner.tr{top:38px;right:38px;color:var(--noir-sub);}
+  .corner.bl{bottom:34px;left:38px;color:var(--cream-sub);}
+  .corner.br{bottom:34px;right:38px;color:var(--noir-sub);}
+  .corner span{opacity:.75;}
+
+  .menu-dots{display:flex;gap:5px;pointer-events:auto;cursor:pointer;}
+  .menu-dots i{width:4px;height:4px;border-radius:50%;background:var(--gold);display:inline-block;}
+
+  /* ripple — a stone dropped in water, on click */
+  .stone-ripple{
+    position:fixed;z-index:40;width:10px;height:10px;border-radius:50%;
+    border:1px solid var(--ripple-color, var(--gold));
+    transform:translate(-50%,-50%) scale(0);
+    opacity:.9;pointer-events:none;
+    animation:stoneRipple 1s cubic-bezier(.2,.75,.3,1) forwards;
+  }
+  @keyframes stoneRipple{
+    0%{transform:translate(-50%,-50%) scale(0);opacity:.85;}
+    100%{transform:translate(-50%,-50%) scale(42);opacity:0;}
+  }
+
+  /* curtain transition, now with a wavy leading edge */
+  .curtain{
+    position:fixed;inset:0;z-index:50;pointer-events:none;
+    display:flex;
+  }
+  .curtain .half{
+    width:50%;height:100%;transform:translateY(-100%);
+    transition:transform 1s cubic-bezier(.65,0,.35,1);
+    clip-path:polygon(0 0,100% 0,100% 92%,90% 96%,80% 93%,70% 97%,60% 94%,50% 98%,40% 93%,30% 97%,20% 94%,10% 98%,0 93%);
+  }
+  .curtain.left-active .half-l{background:var(--cream-bg);transform:translateY(0);}
+  .curtain.left-active .half-r{background:var(--cream-bg);transform:translateY(0);transition-delay:.07s;}
+  .curtain.right-active .half-l{background:var(--noir-bg);transform:translateY(0);}
+  .curtain.right-active .half-r{background:var(--noir-bg);transform:translateY(0);transition-delay:.07s;}
+  .curtain-label{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Cinzel',serif;letter-spacing:.4em;font-size:14px;color:var(--gold);
+    opacity:0;transition:opacity .5s ease .55s;
+  }
+  .curtain.left-active .curtain-label,
+  .curtain.right-active .curtain-label{opacity:1;}
+
+  /* ---------- WORK DRAWER ---------- */
+  .corner.bl span{cursor:pointer;pointer-events:auto;transition:color .3s ease,letter-spacing .3s ease;}
+  .corner.bl span:hover{color:var(--gold);letter-spacing:.32em;}
+
+  .work-overlay{
+    position:fixed;inset:0;z-index:80;
+    background:rgba(8,7,6,.72);backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s ease;
+  }
+  .work-overlay.open{opacity:1;visibility:visible;}
+  .work-panel{
+    width:min(880px,88vw);max-height:78vh;overflow-y:auto;
+    background:var(--noir-bg2);border:1px solid rgba(184,151,90,.25);border-radius:4px;
+    padding:44px 42px;transform:translateY(14px);transition:transform .45s cubic-bezier(.19,1,.22,1);
+    color:var(--noir-text);
+  }
+  .work-overlay.open .work-panel{transform:translateY(0);}
+  .work-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px;}
+  .work-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.35em;color:var(--gold);}
+  .work-close{cursor:pointer;color:var(--noir-sub);font-size:11px;letter-spacing:.2em;pointer-events:auto;}
+  .work-close:hover{color:var(--gold);}
+  .work-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+  .work-card{
+    display:block;padding:20px 18px;border:1px solid rgba(184,151,90,.18);border-radius:3px;
+    color:var(--noir-text);text-decoration:none;font-family:'Cormorant Garamond',serif;
+    transition:border-color .3s ease,background .3s ease,transform .3s ease;
+  }
+  .work-card:hover{border-color:var(--gold);background:rgba(184,151,90,.08);transform:translateY(-2px);}
+  .work-card-name{font-size:18px;font-style:italic;}
+  .work-card-route{display:block;margin-top:6px;font-size:11px;letter-spacing:.1em;color:var(--noir-sub);}
+  .work-empty,.work-loading{color:var(--noir-sub);font-size:14px;}
+
+  /* ---------- HEALTH-CHECK / LOADING STATE ---------- */
+  .panel.preparing{cursor:wait;}
+  .panel.preparing .cta{opacity:.45;letter-spacing:.22em;}
+  .panel.preparing:hover .cta{letter-spacing:.22em;border-color:var(--gold-soft);}
+  .panel.preparing .cta .arrow{opacity:.4;}
+
+  @media (max-width:720px){
+    .stage{flex-direction:column;}
+    .panel{width:100% !important;height:50%;}
+    .stage.hover-left .panel-left{height:64%;}
+    .stage.hover-left .panel-right{height:36%;}
+    .stage.hover-right .panel-right{height:64%;}
+    .stage.hover-right .panel-left{height:36%;}
+    .seam{left:0;top:50%;width:100%;height:26px;transform:translateY(-13px);}
+    .stage.hover-left .seam{top:64%;left:0;}
+    .stage.hover-right .seam{top:36%;left:0;}
+    .mark{top:auto;bottom:50%;left:50%;transform:translate(-50%,20px);}
+    .stage.hover-left .mark,.stage.hover-right .mark{left:50%;}
+    .hint{display:none;}
+    .corner{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="preloader" id="preloader">
+  <div class="preloader-word" id="preloaderWord"></div>
+  <div class="preloader-line"></div>
+  <div class="preloader-sub">DIGITAL LUXURY STUDIO</div>
+</div>
+
+<div class="gate" id="gate">
+  <span class="gate-eyebrow">AUREVIA</span>
+  <div class="gate-title" id="gateTitle"></div>
+  <div class="gate-line"></div>
+</div>
+
+<div class="curtain" id="curtain">
+  <div class="half half-l"></div>
+  <div class="half half-r"></div>
+  <div class="curtain-label" id="curtainLabel"></div>
+</div>
+
+<div class="work-overlay" id="workOverlay">
+  <div class="work-panel">
+    <div class="work-head">
+      <div class="work-title">PORTFOLIO</div>
+      <div class="work-close" id="workClose">CLOSE ✕</div>
+    </div>
+    <div class="work-grid" id="workGrid">
+      <div class="work-loading">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<div class="stage" id="stage">
+
+  <div class="seam" id="seam">
+    <svg class="wave-svg" viewBox="0 0 24 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="waveGradBack" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  style="stop-color:var(--gold);stop-opacity:0"/>
+          <stop offset="18%" style="stop-color:var(--gold);stop-opacity:.5"/>
+          <stop offset="50%" style="stop-color:var(--gold-bright);stop-opacity:.4"/>
+          <stop offset="82%" style="stop-color:var(--gold);stop-opacity:.5"/>
+          <stop offset="100%" style="stop-color:var(--gold);stop-opacity:0"/>
+        </linearGradient>
+        <linearGradient id="waveGradFront" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  style="stop-color:var(--gold);stop-opacity:0"/>
+          <stop offset="15%" style="stop-color:var(--gold-bright);stop-opacity:.95"/>
+          <stop offset="50%" style="stop-color:var(--gold);stop-opacity:.65"/>
+          <stop offset="85%" style="stop-color:var(--gold-bright);stop-opacity:.95"/>
+          <stop offset="100%" style="stop-color:var(--gold);stop-opacity:0"/>
+        </linearGradient>
+      </defs>
+      <path class="wave-back" fill="none" stroke="url(#waveGradBack)" stroke-width="2.2" stroke-linecap="round"
+        d="M12,0 Q4,25 12,50 T12,100 T12,150 T12,200">
+        <animate id="waveAnimateBack" attributeName="d" dur="6s" repeatCount="indefinite"
+          calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M12,0 Q4,25 12,50 T12,100 T12,150 T12,200;
+                  M12,0 Q20,25 12,50 T12,100 T12,150 T12,200;
+                  M12,0 Q4,25 12,50 T12,100 T12,150 T12,200"/>
+      </path>
+      <path class="wave-front" fill="none" stroke="url(#waveGradFront)" stroke-width="1.3" stroke-linecap="round"
+        d="M12,0 Q8,25 12,50 T12,100 T12,150 T12,200">
+        <animate id="waveAnimateFront" attributeName="d" dur="4.5s" repeatCount="indefinite"
+          calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M12,0 Q8,25 12,50 T12,100 T12,150 T12,200;
+                  M12,0 Q16,25 12,50 T12,100 T12,150 T12,200;
+                  M12,0 Q8,25 12,50 T12,100 T12,150 T12,200"/>
+      </path>
+    </svg>
+  </div>
+
+  <div class="mark">
+    <span class="mark-a">aure</span><span class="mark-dot"></span><span class="mark-b">VIA</span>
+  </div>
+  <div class="hint">select an experience</div>
+
+  <div class="corner tl">EST. 2024</div>
+  <div class="corner tr"><div class="menu-dots"><i></i><i></i><i></i></div></div>
+  <div class="corner bl"><span id="workTrigger">PORTFOLIO</span></div>
+  <div class="corner br"><span>CONTACT</span></div>
+
+  <div class="panel panel-left" id="panel-left">
+    <div class="glow"></div>
+    <div class="stars" id="starsField"></div>
+    <div class="panel-inner">
+      <div class="eyebrow" id="eyebrowLeft"></div>
+      <div class="panel-word" id="wordLeft"></div>
+      <div class="tagline">Warmth held in restraint.</div>
+      <div class="cta-wrap">
+        <div class="cta" id="ctaLeft"><span class="cta-label">Enter Solaire</span> <span class="arrow">→</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-right" id="panel-right">
+    <div class="glow"></div>
+    <div class="drift" id="driftField"></div>
+    <div class="panel-inner">
+      <div class="eyebrow" id="eyebrowRight"></div>
+      <div class="panel-word" id="wordRight"></div>
+      <div class="tagline">Depth found after dark.</div>
+      <div class="cta-wrap">
+        <div class="cta" id="ctaRight"><span class="cta-label">Enter Nocturne</span> <span class="arrow">→</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ---- helpers: split text into animated spans ----
+  function splitLetters(el, text, delayStart, step){
+    el.innerHTML = '';
+    [...text].forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      span.style.animationDelay = (delayStart + i * step) + 's';
+      el.appendChild(span);
+    });
+  }
+
+  splitLetters(document.getElementById('preloaderWord'), 'AUREVIA', 0.1, 0.06);
+
+  // ---- sequenced reveal: preloader -> "Choose Your Experience" gate -> stage ----
+  const preloader = document.getElementById('preloader');
+  const gate = document.getElementById('gate');
+  const gateTitle = document.getElementById('gateTitle');
+  const stage = document.getElementById('stage');
+
+  function revealStage(){
+    splitLetters(document.getElementById('eyebrowLeft'), 'DIGITAL LUXURY STUDIO', 0, 0.02);
+    splitLetters(document.getElementById('eyebrowRight'), 'DIGITAL LUXURY STUDIO', 0, 0.02);
+    splitLetters(document.getElementById('wordLeft'), 'Solaire', 0.4, 0.045);
+    splitLetters(document.getElementById('wordRight'), 'NOCTURNE', 0.4, 0.05);
+    stage.classList.add('ready');
+  }
+
+  function showGate(){
+    splitLetters(gateTitle, 'Choose Your Experience', 0.15, 0.025);
+    gate.classList.add('show');
+    setTimeout(() => {
+      gate.classList.remove('show');
+      revealStage();
+      setTimeout(() => gate.remove(), 900);
+    }, 1900);
+  }
+
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      preloader.classList.add('hide');
+      showGate();
+    }, 2200);
+  });
+
+  // ---- hover state ----
+  const left = document.getElementById('panel-left');
+  const right = document.getElementById('panel-right');
+
+  // ---- watery seam control: amplitude + speed react to which side is active ----
+  const waveBack = document.getElementById('waveAnimateBack');
+  const waveFront = document.getElementById('waveAnimateFront');
+
+  function setWaveState(active){
+    const ampFront = active ? 22 : 8;
+    const ampBack  = active ? 16 : 4;
+    const durFront = active ? '2.1s' : '4.5s';
+    const durBack  = active ? '3.1s' : '6s';
+
+    const vFront = `M12,0 Q${12-ampFront},25 12,50 T12,100 T12,150 T12,200;`
+                 + `M12,0 Q${12+ampFront},25 12,50 T12,100 T12,150 T12,200;`
+                 + `M12,0 Q${12-ampFront},25 12,50 T12,100 T12,150 T12,200`;
+    const vBack  = `M12,0 Q${12-ampBack},25 12,50 T12,100 T12,150 T12,200;`
+                 + `M12,0 Q${12+ampBack},25 12,50 T12,100 T12,150 T12,200;`
+                 + `M12,0 Q${12-ampBack},25 12,50 T12,100 T12,150 T12,200`;
+
+    waveFront.setAttribute('values', vFront);
+    waveFront.setAttribute('dur', durFront);
+    waveBack.setAttribute('values', vBack);
+    waveBack.setAttribute('dur', durBack);
+    try{ waveFront.beginElement(); waveBack.beginElement(); }catch(e){}
+  }
+
+  left.addEventListener('mouseenter', () => { stage.classList.add('hover-left'); setWaveState(true); });
+  left.addEventListener('mouseleave', () => { stage.classList.remove('hover-left'); setWaveState(false); });
+  right.addEventListener('mouseenter', () => { stage.classList.add('hover-right'); setWaveState(true); });
+  right.addEventListener('mouseleave', () => { stage.classList.remove('hover-right'); setWaveState(false); });
+
+  // ---- cursor spotlight ----
+  [left, right].forEach(panel => {
+    panel.addEventListener('mousemove', e => {
+      const r = panel.getBoundingClientRect();
+      panel.style.setProperty('--x', (e.clientX - r.left) + 'px');
+      panel.style.setProperty('--y', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  // ---- ripple: a stone dropped in water, at the point of contact ----
+  function createRipple(x, y, color, delay){
+    setTimeout(() => {
+      const r = document.createElement('div');
+      r.className = 'stone-ripple';
+      r.style.left = x + 'px';
+      r.style.top = y + 'px';
+      r.style.setProperty('--ripple-color', color);
+      document.body.appendChild(r);
+      setTimeout(() => r.remove(), 1000);
+    }, delay || 0);
+  }
+
+  // ---- touch fallback ----
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  if (isTouch){
+    left.addEventListener('click', (e) => {
+      if (!stage.classList.contains('hover-left')){
+        e.stopPropagation();
+        stage.classList.add('hover-left');
+        stage.classList.remove('hover-right');
+        setWaveState(true);
+      } else {
+        if (isAppReady('left')) goTo('left', e);
+      }
+    });
+    right.addEventListener('click', (e) => {
+      if (!stage.classList.contains('hover-right')){
+        e.stopPropagation();
+        stage.classList.add('hover-right');
+        stage.classList.remove('hover-left');
+        setWaveState(true);
+      } else {
+        if (isAppReady('right')) goTo('right', e);
+      }
+    });
+  } else {
+    left.addEventListener('click', (e) => { if (isAppReady('left')) goTo('left', e); });
+    right.addEventListener('click', (e) => { if (isAppReady('right')) goTo('right', e); });
+  }
+
+  // ---- curtain transition + navigation ----
+  const curtain = document.getElementById('curtain');
+  const curtainLabel = document.getElementById('curtainLabel');
+
+  function goTo(side, e){
+    if (e){
+      createRipple(e.clientX, e.clientY, 'var(--gold-bright)', 0);
+      createRipple(e.clientX, e.clientY, 'var(--gold)', 140);
+      createRipple(e.clientX, e.clientY, 'var(--gold-soft)', 280);
+    }
+    curtainLabel.textContent = side === 'left' ? 'ENTERING SOLAIRE' : 'ENTERING NOCTURNE';
+    setTimeout(() => {
+      curtain.classList.add(side === 'left' ? 'left-active' : 'right-active');
+    }, 220);
+    setTimeout(() => {
+      window.location.href = side === 'left' ? WHITE_URL : BLACK_URL;
+    }, 1100);
+  }
+
+  // ---- ambient particles ----
+  const starsField = document.getElementById('starsField');
+  for (let i = 0; i < 18; i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 5) + 's';
+    s.style.animationDuration = (4 + Math.random() * 4) + 's';
+    starsField.appendChild(s);
+  }
+
+  const driftField = document.getElementById('driftField');
+  for (let i = 0; i < 14; i++){
+    const d = document.createElement('span');
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDelay = (Math.random() * 10) + 's';
+    d.style.animationDuration = (8 + Math.random() * 10) + 's';
+    driftField.appendChild(d);
+  }
+
+  // ---- work drawer: fetch /api/work-list and render cards ----
+  const workOverlay = document.getElementById('workOverlay');
+  const workGrid = document.getElementById('workGrid');
+  const workTrigger = document.getElementById('workTrigger');
+  const workClose = document.getElementById('workClose');
+  let workListLoaded = false;
+
+  function renderWorkList(items){
+    workGrid.innerHTML = '';
+    if (!items || items.length === 0){
+      workGrid.innerHTML = '<div class="work-empty">No work items found.</div>';
+      return;
+    }
+    items.forEach(item => {
+      const a = document.createElement('a');
+      a.className = 'work-card';
+      a.href = item.route;
+      a.innerHTML = `<span class="work-card-name">${item.id}</span><span class="work-card-route">${item.route}</span>`;
+      workGrid.appendChild(a);
+    });
+  }
+
+  function openWorkDrawer(){
+    workOverlay.classList.add('open');
+    if (!workListLoaded){
+      fetch('/api/work-list')
+        .then(res => res.json())
+        .then(items => { workListLoaded = true; renderWorkList(items); })
+        .catch(() => { workGrid.innerHTML = '<div class="work-empty">Could not load work list.</div>'; });
+    }
+  }
+  function closeWorkDrawer(){ workOverlay.classList.remove('open'); }
+
+  workTrigger.addEventListener('click', (e) => { e.stopPropagation(); openWorkDrawer(); });
+  workClose.addEventListener('click', closeWorkDrawer);
+  workOverlay.addEventListener('click', (e) => { if (e.target === workOverlay) closeWorkDrawer(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeWorkDrawer(); });
+
+  // ---- app health check: poll the gateway until White/Black are reachable ----
+  const WHITE_URL = 'http://localhost:3001';
+  const BLACK_URL = 'http://localhost:3002';
+
+  const ctaLeftLabel  = document.querySelector('#ctaLeft .cta-label');
+  const ctaRightLabel = document.querySelector('#ctaRight .cta-label');
+  const ORIGINAL_LABEL = { left: ctaLeftLabel.textContent, right: ctaRightLabel.textContent };
+  const LOADING_LABEL = 'Preparing Experience…';
+
+  const appStatus = { left: false, right: false };
+
+  function isAppReady(side){ return appStatus[side]; }
+
+  function setAppStatus(side, ready){
+    if (appStatus[side] === ready) return;
+    appStatus[side] = ready;
+    const panel = side === 'left' ? left : right;
+    const label = side === 'left' ? ctaLeftLabel : ctaRightLabel;
+    panel.classList.toggle('preparing', !ready);
+    label.textContent = ready ? ORIGINAL_LABEL[side] : LOADING_LABEL;
+  }
+
+  // Start in the loading state until the first health check resolves.
+  setAppStatus('left', false);
+  setAppStatus('right', false);
+
+  let healthPollTimer = null;
+
+  function pollHealth(){
+    fetch('/api/health', { cache: 'no-store' })
+      .then(res => res.json())
+      .then(data => {
+        setAppStatus('left', !!data.white);
+        setAppStatus('right', !!data.black);
+        if (data.white && data.black && healthPollTimer){
+          clearInterval(healthPollTimer);
+          healthPollTimer = null;
+        }
+      })
+      .catch(() => { /* server briefly unreachable — keep current state and retry */ });
+  }
+
+  pollHealth();
+  healthPollTimer = setInterval(pollHealth, 1500);
+</script>
+
+</body>
+</html>
