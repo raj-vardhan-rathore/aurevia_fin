@@ -7,9 +7,21 @@ import { QUOTES_LEFT, QUOTES_RIGHT } from "@/lib/quotes";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Contact — Aurevia",
+  title: "Contact",
   description:
-    "Tell us about your vision — we reply personally within two business days. We accept a handful of engagements each quarter.",
+    "Contact Aurevia in Indore, India to discuss a strategy, design, technology, or digital growth project for your business.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Aurevia",
+    description: "Contact Aurevia in Indore, India to discuss a strategy, design, technology, or digital growth project for your business.",
+    url: "/contact",
+    images: ["/opengraph-image"],
+  },
+  twitter: {
+    title: "Contact Aurevia",
+    description: "Contact Aurevia in Indore, India to discuss a strategy, design, technology, or digital growth project for your business.",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function ContactPage() {

@@ -20,7 +20,7 @@ export function FeaturedWork() {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-8">
           {WORK.map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08}>
-              <Link href={item.href} className="group block">
+              <Link href="/portfolio" className="group block">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-sm border border-line bg-ink-900 transition-colors duration-700 group-hover:border-gold/40">
                   <motion.div
                     className="absolute inset-0"

@@ -117,9 +117,9 @@ export function StickyHero() {
           />
 
           <p className="hidden max-w-md font-body text-base leading-relaxed text-ivory-muted sm:block sm:text-lg">
-            We design and build digital experiences for brands that refuse
-            to be ordinary &mdash; considered enough to feel rare, precise
-            enough to feel inevitable.
+            Aurevia helps businesses grow through strategy, design, technology,
+            and digital systems that turn attention into enquiries, bookings,
+            and revenue.
           </p>
 
           <div className="flex flex-wrap items-center gap-4 pt-1 lg:gap-5 lg:pt-2">

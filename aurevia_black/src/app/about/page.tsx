@@ -7,11 +7,24 @@ import { FounderCard } from "@/components/sections/studio/FounderCard";
 import { EditorialCTA } from "@/components/sections/EditorialCTA";
 import { Reveal } from "@/components/ui/Reveal";
 import { Footer } from "@/components/layout/Footer";
+import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Studio — Aurevia",
+  title: "Studio",
   description:
-    "A quiet atelier. Aurevia exists because ambitious businesses deserve digital work that feels handmade — even at scale.",
+    "Meet Aurevia, a digital growth studio in Indore, India combining strategy, design, technology, and thoughtful digital systems.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Aurevia",
+    description: "Meet Aurevia, a digital growth studio in Indore, India combining strategy, design, technology, and thoughtful digital systems.",
+    url: "/about",
+    images: ["/opengraph-image"],
+  },
+  twitter: {
+    title: "About Aurevia",
+    description: "Meet Aurevia, a digital growth studio in Indore, India combining strategy, design, technology, and thoughtful digital systems.",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function AboutPage() {
@@ -43,22 +56,51 @@ export default function AboutPage() {
           <div className="col-span-12 space-y-6 font-body text-base leading-[1.8] text-ivory-muted md:col-span-7">
             <Reveal delay={0.1}>
               <p>
-                The web has become fluent in patterns and forgetful of feeling. Templated sites,
-                algorithmic layouts, and stock components have made every brand sound like the
-                last one. Aurevia was founded to reverse that quietly.
+                Aurevia is a digital growth company based in Indore, India. We help businesses
+                improve their digital presence through strategy, design, technology, and digital
+                systems that make customer journeys clearer and more useful.
               </p>
             </Reveal>
             <Reveal delay={0.16}>
               <p>
-                We take a handful of projects each year. We work with founders and creative
-                directors who feel their business deserves the same care they would give a
-                boutique physical space — the light, the scent, the pacing, the surprise.
+                We work with businesses that need their online presence to do more than look
+                considered: it should support visibility, enquiries, bookings, and revenue.
+                Every engagement connects brand decisions with the systems behind them.
               </p>
             </Reveal>
             <Reveal delay={0.22}>
-              <p>Our belief is that a website is a room. And rooms should be composed, not configured.</p>
+              <p>
+                Our belief is that a website is a room. It should be composed, not configured —
+                and built with the clarity to grow with the business.
+              </p>
             </Reveal>
           </div>
+        </div>
+      </section>
+
+      <section className="border-y border-line bg-ink-950 px-6 py-20 sm:px-10 lg:px-14">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
+          <article>
+            <h2 className="font-display text-3xl text-ivory">What Aurevia does</h2>
+            <p className="mt-4 font-body text-sm leading-relaxed text-ivory-muted">
+              We shape digital growth systems: the strategy, design, technology, and operational
+              details that help a business show up clearly online.
+            </p>
+          </article>
+          <article>
+            <h2 className="font-display text-3xl text-ivory">Who we help</h2>
+            <p className="mt-4 font-body text-sm leading-relaxed text-ivory-muted">
+              Aurevia works with businesses that want a stronger digital presence and more
+              considered customer journeys, from first impression to enquiry or booking.
+            </p>
+          </article>
+          <article>
+            <h2 className="font-display text-3xl text-ivory">How we are different</h2>
+            <p className="mt-4 font-body text-sm leading-relaxed text-ivory-muted">
+              We join brand craft with practical systems, so the visible experience and the work
+              behind it move toward the same business outcome.
+            </p>
+          </article>
         </div>
       </section>
 

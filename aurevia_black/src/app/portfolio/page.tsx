@@ -4,9 +4,21 @@ import { PortfolioGrid } from "@/components/sections/portfolio/PortfolioGrid";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Portfolio — Aurevia",
+  title: "Selected Work",
   description:
-    "Forty stories. Twenty industries. One studio. A private gallery of Aurevia engagements — each one a study in restraint, motion, and business outcome.",
+    "View selected Aurevia digital design and technology work, created to give ambitious businesses a more distinctive and effective online presence.",
+  alternates: { canonical: "/portfolio" },
+  openGraph: {
+    title: "Aurevia Selected Work",
+    description: "View selected Aurevia digital design and technology work, created to give ambitious businesses a more distinctive and effective online presence.",
+    url: "/portfolio",
+    images: ["/opengraph-image"],
+  },
+  twitter: {
+    title: "Aurevia Selected Work",
+    description: "View selected Aurevia digital design and technology work, created to give ambitious businesses a more distinctive and effective online presence.",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function PortfolioPage() {

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Aurevia</title>
+  <rect width="64" height="64" rx="14" fill="#0a0908"/>
+  <path fill="#d6af68" d="M32 12 52 51h-8.5l-4-8.4H24.4L20.5 51H12L32 12Zm0 15.9-4.7 9.3h9.4L32 27.9Z"/>
+</svg>

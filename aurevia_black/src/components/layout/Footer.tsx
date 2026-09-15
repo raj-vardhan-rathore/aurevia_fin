@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/Reveal";
 import { RosePetals } from "@/components/layout/RosePetals";
@@ -11,12 +11,6 @@ const SITEMAP = [
   { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
-];
-
-const SOCIALS = [
-  { label: "Instagram", href: "https://instagram.com", Icon: Instagram },
-  { label: "LinkedIn", href: "https://linkedin.com", Icon: Linkedin },
-  { label: "YouTube", href: "https://youtube.com", Icon: Youtube },
 ];
 
 export function Footer() {
@@ -59,21 +53,6 @@ export function Footer() {
                 crafting cinematic, considered work that refuses to be
                 ordinary.
               </p>
-              <div className="mt-8 flex items-center gap-5">
-                {SOCIALS.map(({ label, href, Icon }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    className="group text-ivory-muted transition-colors duration-500 hover:text-gold"
-                  >
-                    <Icon
-                      className="h-[18px] w-[18px] transition-transform duration-500 ease-luxury group-hover:-translate-y-0.5 group-hover:rotate-6"
-                      strokeWidth={1.4}
-                    />
-                  </a>
-                ))}
-              </div>
             </div>
           </Reveal>
 
@@ -132,12 +111,10 @@ export function Footer() {
           <Reveal delay={0.18}>
             <div>
               <h4 className="font-body text-xs uppercase tracking-widest2 text-gold">
-                Studio Hours
+                Based in
               </h4>
               <p className="mt-6 font-body text-sm leading-relaxed text-ivory-muted">
-                Monday &mdash; Friday
-                <br />
-                9:00 &mdash; 18:00 PST
+                Indore, India
               </p>
             </div>
           </Reveal>

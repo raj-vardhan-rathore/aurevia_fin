@@ -225,7 +225,7 @@ export function LandingScreen() {
             AUREVIA
           </h1>
           <p className="font-body text-xs uppercase tracking-widest2 text-ivory-muted sm:text-sm">
-            Crafting Digital Presence Beyond Ordinary
+            Digital Growth Systems for Modern Businesses
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-3 text-ivory-muted">

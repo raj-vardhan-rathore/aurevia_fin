@@ -41,7 +41,7 @@ export function FeaturedServices() {
             const Icon = ICONS[service.icon];
             return (
               <Reveal key={service.title} delay={(i % 3) * 0.06}>
-                <Link href={service.href} className="group block h-full">
+                <Link href="/services" className="group block h-full">
                   <motion.div
                     whileHover={{ y: -6 }}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
